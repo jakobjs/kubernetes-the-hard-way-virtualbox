@@ -241,6 +241,45 @@ kube-proxy-key.pem
 kube-proxy.pem
 ```
 
+### The Scheduler Client Certificate
+
+Generate the `kube-scheduler` client certificate and private key:
+
+```
+cat > kube-scheduler-csr.json <<EOF
+{
+  "CN": "system:kube-scheduler",
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+    {
+      "C": "US",
+      "L": "Portland",
+      "O": "system:kube-scheduler",
+      "OU": "Kubernetes The Hard Way",
+      "ST": "Oregon"
+    }
+  ]
+}
+EOF
+
+cfssl gencert \
+  -ca=ca.pem \
+  -ca-key=ca-key.pem \
+  -config=ca-config.json \
+  -profile=kubernetes \
+  kube-scheduler-csr.json | cfssljson -bare kube-scheduler
+```
+
+Results:
+
+```
+kube-scheduler-key.pem
+kube-scheduler.pem
+```
+
 ### The Kubernetes API Server Certificate
 
 The `kubernetes-the-hard-way` static IP address will be included in the list of subject alternative names for the Kubernetes API Server certificate. This will ensure the certificate can be validated by remote clients.
