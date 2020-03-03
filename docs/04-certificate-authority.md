@@ -1,14 +1,16 @@
 # Provisioning a CA and Generating TLS Certificates
 
-In this lab you will provision a [PKI Infrastructure](https://en.wikipedia.org/wiki/Public_key_infrastructure) using CloudFlare's PKI toolkit, [cfssl](https://github.com/cloudflare/cfssl), then use it to bootstrap a Certificate Authority, and generate TLS certificates for the following components: etcd, kube-apiserver, kubelet, and kube-proxy.
+In this lab you will provision a [PKI Infrastructure](https://en.wikipedia.org/wiki/Public_key_infrastructure) using CloudFlare's PKI toolkit, [cfssl](https://github.com/cloudflare/cfssl), then use it to bootstrap a Certificate Authority, and generate TLS certificates for the following components: etcd, kube-apiserver, kube-controller-manager, kube-scheduler, kubelet, and kube-proxy.
 
 ## Certificate Authority
 
 In this section you will provision a Certificate Authority that can be used to generate additional TLS certificates.
 
-Create the CA configuration file:
+Generate the CA configuration file, certificate, and private key:
 
 ```
+{
+
 cat > ca-config.json <<EOF
 {
   "signing": {
@@ -24,11 +26,7 @@ cat > ca-config.json <<EOF
   }
 }
 EOF
-```
 
-Create the CA certificate signing request:
-
-```
 cat > ca-csr.json <<EOF
 {
   "CN": "Kubernetes",
@@ -47,12 +45,10 @@ cat > ca-csr.json <<EOF
   ]
 }
 EOF
-```
 
-Generate the CA certificate and private key:
-
-```
 cfssl gencert -initca ca-csr.json | cfssljson -bare ca
+
+}
 ```
 
 Results:
@@ -68,9 +64,11 @@ In this section you will generate client and server certificates for each Kubern
 
 ### The Admin Client Certificate
 
-Create the `admin` client certificate signing request:
+Generate the `admin` client certificate and private key:
 
 ```
+{
+
 cat > admin-csr.json <<EOF
 {
   "CN": "admin",
@@ -89,17 +87,15 @@ cat > admin-csr.json <<EOF
   ]
 }
 EOF
-```
 
-Generate the `admin` client certificate and private key:
-
-```
 cfssl gencert \
   -ca=ca.pem \
   -ca-key=ca-key.pem \
   -config=ca-config.json \
   -profile=kubernetes \
   admin-csr.json | cfssljson -bare admin
+
+}
 ```
 
 Results:
@@ -136,13 +132,17 @@ cat > ${instance}-csr.json <<EOF
 }
 EOF
 
-INTERNAL_IP=$(vagrant ssh ${instance} -- "ip -4 --oneline addr | grep -v secondary | grep -oP '(192\.168\.100\.[0-9]{1,3})(?=/)'")
+EXTERNAL_IP=$(gcloud compute instances describe ${instance} \
+  --format 'value(networkInterfaces[0].accessConfigs[0].natIP)')
+
+INTERNAL_IP=$(gcloud compute instances describe ${instance} \
+  --format 'value(networkInterfaces[0].networkIP)')
 
 cfssl gencert \
   -ca=ca.pem \
   -ca-key=ca-key.pem \
   -config=ca-config.json \
-  -hostname=${instance},${INTERNAL_IP} \
+  -hostname=${instance},${EXTERNAL_IP},${INTERNAL_IP} \
   -profile=kubernetes \
   ${instance}-csr.json | cfssljson -bare ${instance}
 done
@@ -164,6 +164,8 @@ worker-2.pem
 Generate the `kube-controller-manager` client certificate and private key:
 
 ```
+{
+
 cat > kube-controller-manager-csr.json <<EOF
 {
   "CN": "system:kube-controller-manager",
@@ -189,6 +191,8 @@ cfssl gencert \
   -config=ca-config.json \
   -profile=kubernetes \
   kube-controller-manager-csr.json | cfssljson -bare kube-controller-manager
+
+}
 ```
 
 Results:
@@ -198,11 +202,14 @@ kube-controller-manager-key.pem
 kube-controller-manager.pem
 ```
 
-### The kube-proxy Client Certificate
 
-Create the `kube-proxy` client certificate signing request:
+### The Kube Proxy Client Certificate
+
+Generate the `kube-proxy` client certificate and private key:
 
 ```
+{
+
 cat > kube-proxy-csr.json <<EOF
 {
   "CN": "system:kube-proxy",
@@ -221,17 +228,15 @@ cat > kube-proxy-csr.json <<EOF
   ]
 }
 EOF
-```
 
-Generate the `kube-proxy` client certificate and private key:
-
-```
 cfssl gencert \
   -ca=ca.pem \
   -ca-key=ca-key.pem \
   -config=ca-config.json \
   -profile=kubernetes \
   kube-proxy-csr.json | cfssljson -bare kube-proxy
+
+}
 ```
 
 Results:
@@ -246,6 +251,8 @@ kube-proxy.pem
 Generate the `kube-scheduler` client certificate and private key:
 
 ```
+{
+
 cat > kube-scheduler-csr.json <<EOF
 {
   "CN": "system:kube-scheduler",
@@ -271,6 +278,8 @@ cfssl gencert \
   -config=ca-config.json \
   -profile=kubernetes \
   kube-scheduler-csr.json | cfssljson -bare kube-scheduler
+
+}
 ```
 
 Results:
@@ -280,19 +289,20 @@ kube-scheduler-key.pem
 kube-scheduler.pem
 ```
 
+
 ### The Kubernetes API Server Certificate
 
 The `kubernetes-the-hard-way` static IP address will be included in the list of subject alternative names for the Kubernetes API Server certificate. This will ensure the certificate can be validated by remote clients.
 
-Retrieve the `kubernetes-the-hard-way` static IP address:
+Generate the Kubernetes API Server certificate and private key:
 
 ```
-KUBERNETES_PUBLIC_ADDRESS="192.168.100.100"
-```
+{
 
-Create the Kubernetes API Server certificate signing request:
+KUBERNETES_PUBLIC_ADDRESS=$(gcloud compute addresses describe kubernetes-the-hard-way \
+  --region $(gcloud config get-value compute/region) \
+  --format 'value(address)')
 
-```
 cat > kubernetes-csr.json <<EOF
 {
   "CN": "kubernetes",
@@ -311,18 +321,16 @@ cat > kubernetes-csr.json <<EOF
   ]
 }
 EOF
-```
 
-Generate the Kubernetes API Server certificate and private key:
-
-```
 cfssl gencert \
   -ca=ca.pem \
   -ca-key=ca-key.pem \
   -config=ca-config.json \
-  -hostname=10.32.0.1,192.168.100.10,192.168.100.11,192.168.100.12,${KUBERNETES_PUBLIC_ADDRESS},127.0.0.1,kubernetes.default \
+  -hostname=10.32.0.1,10.240.0.10,10.240.0.11,10.240.0.12,${KUBERNETES_PUBLIC_ADDRESS},127.0.0.1,kubernetes.default \
   -profile=kubernetes \
   kubernetes-csr.json | cfssljson -bare kubernetes
+
+}
 ```
 
 Results:
@@ -332,6 +340,70 @@ kubernetes-key.pem
 kubernetes.pem
 ```
 
-> The `kube-proxy` and `kubelet` client certificates will be used to generate client authentication configuration files in the next lab.
+## The Service Account Key Pair
+
+The Kubernetes Controller Manager leverages a key pair to generate and sign service account tokens as described in the [managing service accounts](https://kubernetes.io/docs/admin/service-accounts-admin/) documentation.
+
+Generate the `service-account` certificate and private key:
+
+```
+{
+
+cat > service-account-csr.json <<EOF
+{
+  "CN": "service-accounts",
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+    {
+      "C": "US",
+      "L": "Portland",
+      "O": "Kubernetes",
+      "OU": "Kubernetes The Hard Way",
+      "ST": "Oregon"
+    }
+  ]
+}
+EOF
+
+cfssl gencert \
+  -ca=ca.pem \
+  -ca-key=ca-key.pem \
+  -config=ca-config.json \
+  -profile=kubernetes \
+  service-account-csr.json | cfssljson -bare service-account
+
+}
+```
+
+Results:
+
+```
+service-account-key.pem
+service-account.pem
+```
+
+
+## Distribute the Client and Server Certificates
+
+Copy the appropriate certificates and private keys to each worker instance:
+
+```
+for instance in worker-0 worker-1 worker-2; do
+  (vagrant ssh ${instance} -c "cd /vagrant/ && sudo cp -v ${instance}.kubeconfig kube-proxy.kubeconfig ~")
+done
+```
+
+Copy the appropriate certificates and private keys to each controller instance:
+
+```
+for instance in controller-0 controller-1 controller-2; do
+  (vagrant ssh ${instance} -c "cd /vagrant/ && sudo cp -v admin.kubeconfig kube-controller-manager.kubeconfig kube-scheduler.kubeconfig ~")
+done
+```
+
+> The `kube-proxy`, `kube-controller-manager`, `kube-scheduler`, and `kubelet` client certificates will be used to generate client authentication configuration files in the next lab.
 
 Next: [Generating Kubernetes Configuration Files for Authentication](05-kubernetes-configuration-files.md)
