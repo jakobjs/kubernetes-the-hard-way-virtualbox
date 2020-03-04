@@ -367,7 +367,7 @@ Copy the appropriate certificates and private keys to each controller instance:
 
 ```
 for instance in controller-0 controller-1 controller-2; do
-  vagrant ssh ${instance} -c "cd /vagrant/ ; sudo cp -v ca.pem ca-key.pem kubernetes-key.pem kubernetes.pem service-account-key.pem service-account.pem~"
+  vagrant ssh ${instance} -c "cd /vagrant/ ; sudo cp -v ca.pem ca-key.pem kubernetes-key.pem kubernetes.pem service-account-key.pem service-account.pem ~"
 done
 ```
 
