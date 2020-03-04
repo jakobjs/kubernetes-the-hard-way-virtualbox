@@ -353,14 +353,13 @@ service-account-key.pem
 service-account.pem
 ```
 
-
 ## Distribute the Client and Server Certificates
 
 Copy the appropriate certificates and private keys to each worker instance:
 
 ```
 for instance in worker-0 worker-1 worker-2; do
-  (vagrant ssh ${instance} -c "cd /vagrant/ && sudo cp -v ${instance}.kubeconfig kube-proxy.kubeconfig ~")
+  vagrant ssh ${instance} -c "cd /vagrant/ ; sudo cp -v ca.pem ${instance}-key.pem ${instance}.pem ~"
 done
 ```
 
@@ -368,7 +367,7 @@ Copy the appropriate certificates and private keys to each controller instance:
 
 ```
 for instance in controller-0 controller-1 controller-2; do
-  (vagrant ssh ${instance} -c "cd /vagrant/ && sudo cp -v admin.kubeconfig kube-controller-manager.kubeconfig kube-scheduler.kubeconfig ~")
+  vagrant ssh ${instance} -c "cd /vagrant/ ; sudo cp -v ca.pem ca-key.pem kubernetes-key.pem kubernetes.pem service-account-key.pem service-account.pem~"
 done
 ```
 
