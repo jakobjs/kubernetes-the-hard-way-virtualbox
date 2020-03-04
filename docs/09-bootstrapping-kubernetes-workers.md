@@ -219,23 +219,33 @@ EOF
 ### Configure the Kubernetes Proxy
 
 ```
-(cd /vagrant && sudo cp kube-proxy.kubeconfig /var/lib/kube-proxy/kubeconfig)
+(cd /vagrant ; sudo cp kube-proxy.kubeconfig /var/lib/kube-proxy/kubeconfig)
+```
+
+Create the `kube-proxy-config.yaml` configuration file:
+
+```
+cat <<EOF | sudo tee /var/lib/kube-proxy/kube-proxy-config.yaml
+kind: KubeProxyConfiguration
+apiVersion: kubeproxy.config.k8s.io/v1alpha1
+clientConnection:
+  kubeconfig: "/var/lib/kube-proxy/kubeconfig"
+mode: "iptables"
+clusterCIDR: "192.168.0.0/16"
+EOF
 ```
 
 Create the `kube-proxy.service` systemd unit file:
 
 ```
-cat > kube-proxy.service <<EOF
+cat <<EOF | sudo tee /etc/systemd/system/kube-proxy.service
 [Unit]
 Description=Kubernetes Kube Proxy
-Documentation=https://github.com/GoogleCloudPlatform/kubernetes
+Documentation=https://github.com/kubernetes/kubernetes
 
 [Service]
 ExecStart=/usr/local/bin/kube-proxy \\
-  --cluster-cidr=10.244.0.0/16 \\
-  --kubeconfig=/var/lib/kube-proxy/kubeconfig \\
-  --proxy-mode=iptables \\
-  --v=2
+  --config=/var/lib/kube-proxy/kube-proxy-config.yaml
 Restart=on-failure
 RestartSec=5
 
