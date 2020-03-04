@@ -50,19 +50,12 @@ sudo mkdir -p \
 Install the worker binaries:
 
 ```
-sudo tar -xvf /vagrant/cni-plugins-amd64-v0.6.0.tgz -C /opt/cni/bin/
-```
-
-```
-sudo tar -xvf /vagrant/cri-containerd-1.0.0-alpha.0.tar.gz -C /
-```
-
-```
-(cd /vagrant && sudo cp kubectl kube-proxy kubelet /usr/local/bin/)
-```
-
-```
-(cd /usr/local/bin && sudo chmod +x kubectl kube-proxy kubelet)
+sudo cp -v /vagrant/runc.amd64 runc
+(cd /vagrant/ ; sudo cp -v kubectl kube-proxy kubelet runc /usr/local/bin/ )
+(cd /usr/local/bin ; chmod +x kubectl kube-proxy kubelet runc)
+sudo tar -xvf /vagrant/crictl-v1.15.0-linux-amd64.tar.gz -C /usr/local/bin/
+sudo tar -xvf /vagrant/cni-plugins-linux-amd64-v0.8.2.tgz -C /opt/cni/bin/
+sudo tar -xvf /vagrant/containerd-1.2.9.linux-amd64.tar.gz -C /
 ```
 
 ### Get Worker Internal IP
