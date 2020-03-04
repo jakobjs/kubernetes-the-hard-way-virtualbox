@@ -254,27 +254,6 @@ WantedBy=multi-user.target
 EOF
 ```
 
-### Configure the cri-containerd
-Create the `cri-containerd.service` systemd unit file:
-
-```
-cat > cri-containerd.service <<EOF
-[Unit]
-Description=Kubernetes containerd CRI shim
-Requires=network-online.target
-After=containerd.service
-
-[Service]
-Restart=always
-RestartSec=5
-ExecStart=/usr/local/bin/cri-containerd --logtostderr --stream-addr ${INTERNAL_IP}
-OOMScoreAdjust=-999
-
-[Install]
-WantedBy=multi-user.target
-EOF
-```
-
 ### Start the Worker Services
 
 ```
@@ -306,16 +285,16 @@ vagrant ssh controller-0
 List the registered Kubernetes nodes:
 
 ```
-kubectl get nodes
+kubectl get nodes --kubeconfig admin.kubeconfig
 ```
 
 > output
 
 ```
 NAME       STATUS     ROLES     AGE       VERSION
-worker-0   NotReady   <none>    1m        v1.8.0
-worker-1   NotReady   <none>    1m        v1.8.0
-worker-2   NotReady   <none>    1m        v1.8.0
+worker-0   NotReady   <none>    1m        v1.17.3
+worker-1   NotReady   <none>    1m        v1.17.3
+worker-2   NotReady   <none>    1m        v1.17.3
 ```
 
 Next: [Configuring kubectl for Remote Access](10-configuring-kubectl.md)
