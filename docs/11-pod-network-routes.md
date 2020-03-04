@@ -9,7 +9,8 @@ wget -q --show-progress --https-only --timestamping \
 	"https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml"
 ```
 
-修改`command: [ "/opt/bin/flanneld", "--ip-masq", "--kube-subnet-mgr"]`为`command: [ "/opt/bin/flanneld", "--ip-masq", "--kube-subnet-mgr", "--iface-regex=192\\.168\\.100\\."]`。
+Modify command: [ "/opt/bin/flanneld", "--ip-masq", "--kube-subnet-mgr"] 
+To command: [ "/opt/bin/flanneld", "--ip-masq", "--kube-subnet-mgr", "--iface-regex=192\\.168\\.100\\."]`。
 
 ```
 kubectl apply -f kube-flannel.yml
