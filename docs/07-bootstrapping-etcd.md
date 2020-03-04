@@ -39,7 +39,7 @@ sudo mkdir -p /etc/etcd /var/lib/etcd
 ```
 
 ```
-sudo cp ca.pem kubernetes-key.pem kubernetes.pem /etc/etcd/)
+sudo cp ca.pem kubernetes-key.pem kubernetes.pem /etc/etcd/
 ```
 
 The instance internal IP address will be used to serve client requests and communicate with etcd cluster peers. Retrieve the internal IP address for the current compute instance:
