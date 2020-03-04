@@ -186,7 +186,7 @@ Copy the appropriate `kubelet` and `kube-proxy` kubeconfig files to each worker 
 
 ```
 for instance in worker-0 worker-1 worker-2; do
-  vagrant ssh ${instance} -c "cd /vagrant/ ; sudo cp -v ${instance}.kubeconfig kube-proxy.kubeconfig ${instance} ~"
+  vagrant ssh ${instance} -c "cd /vagrant/ ; sudo cp -v ${instance}.kubeconfig kube-proxy.kubeconfig ~"
 done
 ```
 
