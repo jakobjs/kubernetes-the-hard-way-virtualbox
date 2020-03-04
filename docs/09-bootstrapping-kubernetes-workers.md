@@ -28,7 +28,7 @@ wget -q --show-progress --https-only --timestamping \
 Install the OS dependencies:
 
 ```
-sudo apt update && sudo apt -y install socat conntrack ipset
+sudo apt-get update ; sudo apt-get -y install socat conntrack ipset
 ```
 
 > The socat binary enables support for the `kubectl port-forward` command.
