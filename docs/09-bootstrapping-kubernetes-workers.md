@@ -50,7 +50,7 @@ sudo mkdir -p \
 Install the worker binaries:
 
 ```
-sudo cp -v /vagrant/runc.amd64 runc
+sudo cp -v /vagrant/runc.amd64 /vagrant/runc
 (cd /vagrant/ ; sudo cp -v kubectl kube-proxy kubelet runc /usr/local/bin/ )
 (cd /usr/local/bin ; chmod +x kubectl kube-proxy kubelet runc)
 sudo tar -xvf /vagrant/crictl-v1.15.0-linux-amd64.tar.gz -C /usr/local/bin/
