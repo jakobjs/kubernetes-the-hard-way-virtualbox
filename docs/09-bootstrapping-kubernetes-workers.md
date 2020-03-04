@@ -52,7 +52,7 @@ Install the worker binaries:
 ```
 sudo cp -v /vagrant/runc.amd64 /vagrant/runc
 (cd /vagrant/ ; sudo cp -v kubectl kube-proxy kubelet runc /usr/local/bin/ )
-(cd /usr/local/bin ; chmod +x kubectl kube-proxy kubelet runc)
+(cd /usr/local/bin ; sudo chmod +x kubectl kube-proxy kubelet runc)
 sudo tar -xvf /vagrant/crictl-v1.15.0-linux-amd64.tar.gz -C /usr/local/bin/
 sudo tar -xvf /vagrant/cni-plugins-linux-amd64-v0.8.2.tgz -C /opt/cni/bin/
 sudo tar -xvf /vagrant/containerd-1.2.9.linux-amd64.tar.gz -C /
