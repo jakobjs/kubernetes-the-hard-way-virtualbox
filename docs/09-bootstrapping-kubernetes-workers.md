@@ -155,15 +155,9 @@ EOF
 ### Configure the Kubelet
 
 ```
-(cd /vagrant && sudo cp ${HOSTNAME}-key.pem ${HOSTNAME}.pem /var/lib/kubelet/)
-```
-
-```
-(cd /vagrant && sudo cp ${HOSTNAME}.kubeconfig /var/lib/kubelet/kubeconfig)
-```
-
-```
-(cd /vagrant && sudo cp ca.pem /var/lib/kubernetes/)
+(cd /vagrant ; sudo cp ${HOSTNAME}-key.pem ${HOSTNAME}.pem /var/lib/kubelet/)
+(cd /vagrant ; sudo cp ${HOSTNAME}.kubeconfig /var/lib/kubelet/kubeconfig)
+(cd /vagrant ; sudo cp ca.pem /var/lib/kubernetes/)
 ```
 
 Create the `kubelet.service` systemd unit file:
