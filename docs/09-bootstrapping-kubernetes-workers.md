@@ -64,6 +64,94 @@ sudo tar -xvf /vagrant/containerd-1.2.9.linux-amd64.tar.gz -C /
 INTERNAL_IP=$(ip -4 --oneline addr | grep -v secondary | grep -oP '(192\.168\.100\.[0-9]{1,3})(?=/)')
 ```
 
+### Configure CNI Networking
+
+Retrieve the Pod CIDR range for the current compute instance:
+
+```
+POD_CIDR="192.168.100.0/24"
+```
+
+Create the `bridge` network configuration file:
+
+```
+cat <<EOF | sudo tee /etc/cni/net.d/10-bridge.conf
+{
+    "cniVersion": "0.3.1",
+    "name": "bridge",
+    "type": "bridge",
+    "bridge": "cnio0",
+    "isGateway": true,
+    "ipMasq": true,
+    "ipam": {
+        "type": "host-local",
+        "ranges": [
+          [{"subnet": "${POD_CIDR}"}]
+        ],
+        "routes": [{"dst": "0.0.0.0/0"}]
+    }
+}
+EOF
+```
+
+Create the `loopback` network configuration file:
+
+```
+cat <<EOF | sudo tee /etc/cni/net.d/99-loopback.conf
+{
+    "cniVersion": "0.3.1",
+    "name": "lo",
+    "type": "loopback"
+}
+EOF
+```
+
+### Configure containerd
+
+Create the `containerd` configuration file:
+
+```
+sudo mkdir -p /etc/containerd/
+```
+
+```
+cat << EOF | sudo tee /etc/containerd/config.toml
+[plugins]
+  [plugins.cri.containerd]
+    snapshotter = "overlayfs"
+    [plugins.cri.containerd.default_runtime]
+      runtime_type = "io.containerd.runtime.v1.linux"
+      runtime_engine = "/usr/local/bin/runc"
+      runtime_root = ""
+EOF
+```
+
+Create the `containerd.service` systemd unit file:
+
+```
+cat <<EOF | sudo tee /etc/systemd/system/containerd.service
+[Unit]
+Description=containerd container runtime
+Documentation=https://containerd.io
+After=network.target
+
+[Service]
+ExecStartPre=/sbin/modprobe overlay
+ExecStart=/bin/containerd
+Restart=always
+RestartSec=5
+Delegate=yes
+KillMode=process
+OOMScoreAdjust=-999
+LimitNOFILE=1048576
+LimitNPROC=infinity
+LimitCORE=infinity
+
+[Install]
+WantedBy=multi-user.target
+EOF
+```
+
 ### Configure the Kubelet
 
 ```
