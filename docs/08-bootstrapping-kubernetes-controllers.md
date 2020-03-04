@@ -42,7 +42,7 @@ sudo mkdir -p /var/lib/kubernetes/
 ```
 
 ```
-(cd /vagrant && sudo cp ca.pem ca-key.pem kubernetes-key.pem kubernetes.pem encryption-config.yaml /var/lib/kubernetes/)
+sudo cp ca.pem ca-key.pem kubernetes-key.pem kubernetes.pem encryption-config.yaml /var/lib/kubernetes/
 ```
 
 The instance internal IP address will be used advertise the API Server to members of the cluster. Retrieve the internal IP address for the current compute instance:
@@ -86,7 +86,7 @@ ExecStart=/usr/local/bin/kube-apiserver \\
   --kubelet-https=true \\
   --runtime-config=api/all \\
   --service-account-key-file=/var/lib/kubernetes/ca-key.pem \\
-  --service-cluster-ip-range=10.32.0.0/24 \\
+  --service-cluster-ip-range=192.168.100.0/24 \\
   --service-node-port-range=30000-32767 \\
   --tls-ca-file=/var/lib/kubernetes/ca.pem \\
   --tls-cert-file=/var/lib/kubernetes/kubernetes.pem \\
@@ -114,7 +114,7 @@ Documentation=https://github.com/GoogleCloudPlatform/kubernetes
 ExecStart=/usr/local/bin/kube-controller-manager \\
   --address=0.0.0.0 \\
   --allocate-node-cidrs=true \\
-  --cluster-cidr=10.244.0.0/16 \\
+  --cluster-cidr=192.168.0.0/16 \\
   --cluster-name=kubernetes \\
   --cluster-signing-cert-file=/var/lib/kubernetes/ca.pem \\
   --cluster-signing-key-file=/var/lib/kubernetes/ca-key.pem \\
@@ -122,7 +122,7 @@ ExecStart=/usr/local/bin/kube-controller-manager \\
   --master=http://127.0.0.1:8080 \\
   --root-ca-file=/var/lib/kubernetes/ca.pem \\
   --service-account-private-key-file=/var/lib/kubernetes/ca-key.pem \\
-  --service-cluster-ip-range=10.32.0.0/24 \\
+  --service-cluster-ip-range=192.168.100.0/24 \\
   --v=2
 Restart=on-failure
 RestartSec=5
