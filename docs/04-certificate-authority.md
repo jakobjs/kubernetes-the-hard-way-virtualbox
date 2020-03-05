@@ -275,7 +275,7 @@ The `kubernetes-the-hard-way` static IP address will be included in the list of 
 Generate the Kubernetes API Server certificate and private key:
 
 ```
-KUBERNETES_PUBLIC_ADDRESS="192.168.100.100"
+KUBERNETES_PUBLIC_ADDRESS=192.168.100.100
 
 cat > kubernetes-csr.json <<EOF
 {
