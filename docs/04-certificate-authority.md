@@ -130,7 +130,7 @@ cfssl gencert \
   -ca=ca.pem \
   -ca-key=ca-key.pem \
   -config=ca-config.json \
-  -hostname=${instance},${INTERNAL_IP} \
+  -hostname=${instance},${INTERNAL_IP},192.168.100.1,192.168.100.10,192.168.100.11,192.168.100.22,192.168.100.12 \
   -profile=kubernetes \
   ${instance}-csr.json | cfssljson -bare ${instance}
 done
@@ -305,7 +305,7 @@ cfssl gencert \
 ```
 
 ```
-cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -hostname=192.168.100.20,192.168.100.21,192.168.100.22,192.168.100.10,192.168.100.11,192.168.100.12,${KUBERNETES_PUBLIC_ADDRESS},127.0.0.1,kubernetes.default -profile=kubernetes  kubernetes-csr.json
+cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -hostname=192.168.100.1,192.168.100.20,192.168.100.21,192.168.100.22,192.168.100.10,192.168.100.11,192.168.100.12,${KUBERNETES_PUBLIC_ADDRESS},127.0.0.1,kubernetes.default -profile=kubernetes  kubernetes-csr.json | cfssljson -bare kubernetes
 ```
 
 Results:
