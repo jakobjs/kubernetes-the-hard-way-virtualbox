@@ -130,7 +130,7 @@ cfssl gencert \
   -ca=ca.pem \
   -ca-key=ca-key.pem \
   -config=ca-config.json \
-  -hostname=${instance},${INTERNAL_IP},192.168.100.1,192.168.100.10,192.168.100.11,192.168.100.22,192.168.100.12 \
+  -hostname=${instance},${INTERNAL_IP},192.168.100.1,192.168.100.10,192.168.100.11,192.168.100.12,192.168.100.20,192.168.100.21,192.168.100.22,192.168.100.100 \
   -profile=kubernetes \
   ${instance}-csr.json | cfssljson -bare ${instance}
 done
