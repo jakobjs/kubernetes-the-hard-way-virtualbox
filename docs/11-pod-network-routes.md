@@ -8,13 +8,18 @@
 wget --quiet --show-progress https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 ```
 
-Modify:
+Modify the lines in kube-flannel.yml:
 
-```[ "/opt/bin/flanneld", "--ip-masq", "--kube-subnet-mgr"] ```
+```     - --ip-masq
+        - --kube-subnet-mgr
+```
 
 To:
 
-```[ "/opt/bin/flanneld", "--ip-masq", "--kube-subnet-mgr", "--iface-regex=192\\.168\\.100\\."]`。```
+```     - --ip-masq
+        - --kube-subnet-mgr
+        - --iface-regex=192\.168\.100\.[0-9]{0,3}
+```
 
 ```
 kubectl apply -f kube-flannel.yml
