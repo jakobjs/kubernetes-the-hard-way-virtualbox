@@ -1,6 +1,6 @@
 #!/bin/bash
 
-apt install -y heartbeat
+apt-get install -y heartbeat
 
 cat >/etc/ha.d/ha.cf <<EOF
 debugfile /var/log/ha-debug
