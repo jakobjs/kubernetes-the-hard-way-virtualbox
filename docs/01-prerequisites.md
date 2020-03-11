@@ -2,17 +2,17 @@
 
 ## VirtualBox
 
-This tutorial leverages the [VirtualBox](https://www.virtualbox.org/) to streamline provisioning of the compute infrastructure required to bootstrap a Kubernetes cluster from the ground up. Click to [download and install VirtualBox](https://www.virtualbox.org/wiki/Downloads).
+This tutorial leverages [VirtualBox](https://www.virtualbox.org/) to streamline provisioning of the compute infrastructure required to bootstrap a Kubernetes cluster from the ground up. Click to [download and install VirtualBox](https://www.virtualbox.org/wiki/Downloads).
 
 ### Vagrant
 
-使用 [Vagrant](https://www.vagrantup.com/) 管理虚拟机资源，使用 [vagrant-hosts](https://github.com/oscar-stack/vagrant-hosts) 插件管理虚拟机中的`/etc/hosts`文件。
+The [Vagrant](https://www.vagrantup.com/) binary should be installed on your system. Also set up [vagrant-hosts](https://github.com/oscar-stack/vagrant-hosts) that can manage `/etc/hosts`:
 
 ```
 vagrant plugin install vagrant-hosts
 ```
 
-> output
+> Output
 
 ```
 Installing the 'vagrant-hosts' plugin. This can take a few minutes...
