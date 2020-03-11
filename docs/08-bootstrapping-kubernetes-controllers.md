@@ -28,7 +28,7 @@ vagrant ssh controller-0
 Install the Kubernetes binaries:
 
 ```
-(cd /vagrant && sudo cp kube-apiserver kube-controller-manager kube-scheduler kubectl /usr/local/bin/)
+(cd /vagrant && sudo cp --verbose kube-apiserver kube-controller-manager kube-scheduler kubectl /usr/local/bin/)
 ```
 
 ```
