@@ -26,6 +26,8 @@ vagrant ssh controller-0
 Extract and install the `etcd` server and the `etcdctl` command line utility:
 
 ```
+ETCD_VER=v3.4.4
+
 tar -xvf /vagrant/etcd-$ETCD_VER-linux-amd64.tar.gz
 ```
 
