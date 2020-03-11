@@ -10,13 +10,15 @@ wget --quiet --show-progress https://raw.githubusercontent.com/coreos/flannel/ma
 
 Modify the lines in kube-flannel.yml:
 
-```     - --ip-masq
+```
+        - --ip-masq
         - --kube-subnet-mgr
 ```
 
 To:
 
-```     - --ip-masq
+```
+        - --ip-masq
         - --kube-subnet-mgr
         - --iface-regex=192\.168\.100\.[0-9]{0,3}
 ```
