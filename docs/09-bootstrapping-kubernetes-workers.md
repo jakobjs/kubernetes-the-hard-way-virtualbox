@@ -33,6 +33,21 @@ sudo apt-get update ; sudo apt-get -y install socat conntrack ipset
 
 > The socat binary enables support for the `kubectl port-forward` command.
 
+### Disable Swap
+
+By default the kubelet will fail to start if [swap](https://help.ubuntu.com/community/SwapFaq) is enabled. It is [recommended](https://github.com/kubernetes/kubernetes/issues/7294) that swap be disabled to ensure Kubernetes can provide proper resource allocation and quality of service.
+
+Verify if swap is enabled:
+
+```
+sudo swapon --show
+```
+
+If output is empthy then swap is not enabled. If swap is enabled run the following command to disable swap immediately:
+
+```
+sudo swapoff -a
+```
 
 ## Install Worker Binaries
 Create the installation directories:
