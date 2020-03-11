@@ -9,7 +9,7 @@ Download the official etcd release binaries from the [coreos/etcd](https://githu
 ```
 ETCD_VER=v3.4.4
 
-wget --quiet --show-progress https://storage.googleapis.com/etcd/${ETCD_VER}/etcd-$ETCD_VER-linux-amd64.tar.gz
+wget --quiet --show-progress https://storage.googleapis.com/etcd/$ETCD_VER/etcd-$ETCD_VER-linux-amd64.tar.gz
 ```
 
 ## Prerequisites
