@@ -2,7 +2,7 @@
 
 ## Flannel
 
-Set up`flannel` for pod networking.
+Set up [Flannel](https://github.com/coreos/flannel#flannel) for container networking.
 
 ```
 wget --quiet --show-progress https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
@@ -21,6 +21,7 @@ To:
         - --ip-masq
         - --kube-subnet-mgr
         - --iface-regex=192\.168\.100\.[0-9]{0,3}
+		- --healthz-port=8445
 ```
 
 ```
@@ -37,7 +38,7 @@ configmap "kube-flannel-cfg" created
 daemonset "kube-flannel-ds" created
 ```
 
-### 验证
+### Check Flannel status
 ```
 kubectl -n kube-system get pods
 ```
@@ -51,7 +52,7 @@ kube-flannel-ds-9mxnc   1/1       Running   0          1m
 kube-flannel-ds-ldfq6   1/1       Running   0          1m
 ```
 
-同时 worker 状态也会更新为`Ready`。
+Check if worker nodes are `Ready`。
 
 ```
 kubectl get nodes
@@ -61,9 +62,9 @@ kubectl get nodes
 
 ```
 NAME       STATUS    ROLES     AGE      VERSION
-worker-0   Ready     <none>    3m       v1.8.0
-worker-1   Ready     <none>    3m       v1.8.0
-worker-2   Ready     <none>    3m       v1.8.0
+worker-0   Ready     <none>    3m       v1.17.3
+worker-1   Ready     <none>    3m       v1.17.3
+worker-2   Ready     <none>    3m       v1.17.3
 ```
 
 Next: [Deploying the DNS Cluster Add-on](12-dns-addon.md)
