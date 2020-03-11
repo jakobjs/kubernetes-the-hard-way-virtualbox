@@ -11,7 +11,7 @@ Each kubeconfig requires a Kubernetes API Server to connect to. To support high 
 Retrieve the `kubernetes-the-hard-way` static IP address:
 
 ```
-KUBERNETES_PUBLIC_ADDRESS="192.168.100.100"
+KUBERNETES_PUBLIC_ADDRESS=192.168.100.100
 ```
 
 Generate a kubeconfig file suitable for authenticating as the `admin` user:
