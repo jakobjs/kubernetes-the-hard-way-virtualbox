@@ -7,8 +7,9 @@ Kubernetes components are stateless and store cluster state in [etcd](https://gi
 Download the official etcd release binaries from the [coreos/etcd](https://github.com/coreos/etcd) GitHub project:
 
 ```
-wget -q --show-progress --https-only --timestamping \
-  "https://github.com/coreos/etcd/releases/download/v3.2.8/etcd-v3.2.8-linux-amd64.tar.gz"
+ETCD_VER=v3.4.4
+
+wget --quiet --show-progress https://storage.googleapis.com/etcd${ETCD_VER}/etcd-${ETCD_VER}-linux-amd64.tar.gz
 ```
 
 ## Prerequisites
