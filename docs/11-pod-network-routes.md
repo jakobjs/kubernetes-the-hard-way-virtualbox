@@ -2,7 +2,7 @@
 
 ## Flannel
 
-使用 `flannel` 来解决 Pod 间通信问题。
+Set up`flannel` for pod networking.
 
 ```
 wget --quiet --show-progress https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
