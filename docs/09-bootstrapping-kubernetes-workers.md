@@ -47,6 +47,8 @@ If output is empthy then swap is not enabled. If swap is enabled run the followi
 
 ```
 sudo swapoff -a
+sudo sysctl vm.swappiness=0
+reboot
 ```
 
 ## Install Worker Binaries
