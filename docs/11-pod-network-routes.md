@@ -5,8 +5,7 @@
 使用 `flannel` 来解决 Pod 间通信问题。
 
 ```
-wget -q --show-progress --https-only --timestamping \
-	"https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml"
+wget --quiet --show-progress https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 ```
 
 Modify:
