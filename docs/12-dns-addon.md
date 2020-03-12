@@ -10,7 +10,7 @@ Deploy the `coredns` cluster add-on:
 wget --quiet --show-progress https://storage.googleapis.com/kubernetes-the-hard-way/coredns.yaml
 ```
 
-Modify
+Edit 'coredns.yaml' and modify
 ```
   clusterIP: 10.32.0.10
 ```
