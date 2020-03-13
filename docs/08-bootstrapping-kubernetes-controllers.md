@@ -324,16 +324,15 @@ curl --cacert ca.pem https://${KUBERNETES_PUBLIC_ADDRESS}:6443/version
 > output
 
 ```
-{
-  "major": "1",
-  "minor": "8",
-  "gitVersion": "v1.8.0",
-  "gitCommit": "6e937839ac04a38cac63e6a7a306c5d035fe7b0a",
-  "gitTreeState": "clean",
-  "buildDate": "2017-09-28T22:46:41Z",
-  "goVersion": "go1.8.3",
-  "compiler": "gc",
-  "platform": "linux/amd64"
+"major": "1",
+"minor": "8",
+"gitVersion": "v1.8.0",
+"gitCommit": "6e937839ac04a38cac63e6a7a306c5d035fe7b0a",
+"gitTreeState": "clean",
+"buildDate": "2017-09-28T22:46:41Z",
+"goVersion": "go1.8.3",
+"compiler": "gc",
+"platform": "linux/amd64"
 ```
 
 Next: [Bootstrapping the Kubernetes Worker Nodes](09-bootstrapping-kubernetes-workers.md)
